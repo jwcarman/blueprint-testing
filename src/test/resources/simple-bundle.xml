@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <bean id="helloBean" class="com.carmanconsulting.osgi.blueprint.test.pojos.HelloBean" />
+
+    <reference id="transactionManager" interface="javax.transaction.TransactionManager" />
+
+    <service interface="com.carmanconsulting.osgi.blueprint.test.pojos.Hello" ref="helloBean">
+    </service>
+
+</blueprint>
