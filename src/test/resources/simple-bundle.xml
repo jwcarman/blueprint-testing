@@ -6,6 +6,9 @@
     <reference id="transactionManager" interface="javax.transaction.TransactionManager" />
 
     <service interface="com.carmanconsulting.osgi.blueprint.test.pojos.Hello" ref="helloBean">
+        <service-properties>
+            <entry key="foo" value="bar" />
+        </service-properties>
     </service>
 
 </blueprint>

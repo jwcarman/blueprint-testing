@@ -1,7 +1,9 @@
 package com.carmanconsulting.osgi.blueprint.test;
 
+import com.carmanconsulting.osgi.blueprint.test.environment.EnvironmentBundleSpec;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.ops4j.pax.swissbox.tinybundles.core.TinyBundle;
 import org.ops4j.pax.swissbox.tinybundles.core.TinyBundles;
 import org.osgi.framework.BundleContext;
@@ -9,30 +11,24 @@ import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BaseTest
+public abstract class BaseTest
 {
-    private BundleContext bundleContext;
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
+    private BundleContext bundleContext;
 
-    @Before
-    public void setUp() throws Exception
-    {
-        String symbolicName = getClass().getSimpleName();
+//----------------------------------------------------------------------------------------------------------------------
+// Abstract Methods
+//----------------------------------------------------------------------------------------------------------------------
 
-        TinyBundle testBundle = Helper.createTestBundle(symbolicName, "1.0.0.SNAPSHOT", getBlueprintDescriptor());
+    protected abstract void configureEnvironment(EnvironmentBundleSpec environmentBundleSpec);
 
-        this.bundleContext = Helper.createBundleContext(getBundleFilter(), new TinyBundle[]{testBundle});
-        log.debug("Waiting for BlueprintContainer to be published with symbolicName: {}", symbolicName);
-        getOsgiService(BlueprintContainer.class, "(osgi.blueprint.container.symbolicname=" + symbolicName + ")");
-
-    }
-
-    @After
-    public void tearDown() throws Exception
-    {
-        Helper.disposeBundleContext(bundleContext);
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Getter/Setter Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     /**
      * Return the system bundle context
@@ -43,6 +39,10 @@ public class BaseTest
     {
         return bundleContext;
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     /**
      * Gets the bundle descriptor from the classpath.
@@ -99,5 +99,24 @@ public class BaseTest
     protected <T> T getOsgiService(Class<T> type, String filter, long timeout)
     {
         return Helper.getOsgiService(bundleContext, type, filter, timeout);
+    }
+
+    @Before
+    public void setUp() throws Exception
+    {
+        String testBundleName = getClass().getSimpleName();
+        TinyBundle testBundle = Helper.createTestBundle(testBundleName, "1.0.0.SNAPSHOT", getBlueprintDescriptor());
+        String environmentBundleName = testBundleName + "Environment";
+        configureEnvironment(EnvironmentBundleSpec.create(environmentBundleName));
+        TinyBundle environmentBundle = Helper.createEnvironmentBundle(environmentBundleName, "1.0.0.SNAPSHOT");
+        this.bundleContext = Helper.createBundleContext(getBundleFilter(), new TinyBundle[]{testBundle, environmentBundle});
+        log.debug("Waiting for BlueprintContainer to be published with symbolicName: {}", testBundleName);
+        getOsgiService(BlueprintContainer.class, "(osgi.blueprint.container.symbolicname=" + testBundleName + ")");
+    }
+
+    @After
+    public void tearDown() throws Exception
+    {
+        Helper.disposeBundleContext(bundleContext);
     }
 }

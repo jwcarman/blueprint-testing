@@ -1,5 +1,6 @@
 package com.carmanconsulting.osgi.blueprint.test;
 
+import com.carmanconsulting.osgi.blueprint.test.environment.EnvironmentBundleActivator;
 import de.kalpatec.pojosr.framework.PojoServiceRegistryFactoryImpl;
 import de.kalpatec.pojosr.framework.launch.BundleDescriptor;
 import de.kalpatec.pojosr.framework.launch.ClasspathScanner;
@@ -227,6 +228,18 @@ public final class Helper
     {
         File dir = new File(file);
         dir.mkdirs();
+    }
+
+    protected static TinyBundle createEnvironmentBundle(String name, String version)
+    {
+        TinyBundle bundle = TinyBundles.newBundle();
+
+        bundle.set("Manifest-Version", "2")
+                .set("Bundle-ManifestVersion", "2")
+                .set("Bundle-SymbolicName", name)
+                .set("Bundle-Version", version)
+                .set("Bundle-Activator", EnvironmentBundleActivator.class.getName());
+        return bundle;
     }
 
     /**
