@@ -1,18 +1,15 @@
 package com.carmanconsulting.osgi.blueprint.test;
 
 import com.carmanconsulting.osgi.blueprint.test.environment.EnvironmentBundleSpec;
-import com.carmanconsulting.osgi.blueprint.test.environment.ServiceSpec;
 import com.carmanconsulting.osgi.blueprint.test.pojos.Hello;
 import org.junit.Test;
 
-import javax.sql.DataSource;
 import javax.transaction.TransactionManager;
-import java.io.Serializable;
-import java.lang.reflect.Proxy;
+import java.net.URL;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
-public class TestBundles extends BaseTest
+public class TestBundles extends AbstractBlueprintConfigurationTest
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Other Methods
@@ -25,9 +22,9 @@ public class TestBundles extends BaseTest
     }
 
     @Override
-    protected String getBlueprintDescriptor()
+    protected URL getBlueprintDescriptor()
     {
-        return "simple-bundle.xml";
+        return getClass().getResource("/simple-bundle.xml");
     }
 
     @Test
