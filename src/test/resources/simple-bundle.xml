@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0">
 
+    <cm:property-placeholder persistent-id="com.carmanconsulting.osgi.blueprint.test">
+        <cm:default-properties>
+            <cm:property name="foo" value="bar" />
+        </cm:default-properties>
+    </cm:property-placeholder>
     <bean id="helloBean" class="com.carmanconsulting.osgi.blueprint.test.pojos.HelloBean" />
 
+    
     <reference id="transactionManager" interface="javax.transaction.TransactionManager" />
 
     <service interface="com.carmanconsulting.osgi.blueprint.test.pojos.Hello" ref="helloBean">
         <service-properties>
-            <entry key="foo" value="bar" />
+            <entry key="foo" value="${baz}" />
         </service-properties>
     </service>
 

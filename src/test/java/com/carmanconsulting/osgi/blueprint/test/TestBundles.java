@@ -3,6 +3,7 @@ package com.carmanconsulting.osgi.blueprint.test;
 import com.carmanconsulting.osgi.blueprint.test.environment.EnvironmentBundleSpec;
 import com.carmanconsulting.osgi.blueprint.test.pojos.Hello;
 import org.junit.Test;
+import org.osgi.service.cm.ConfigurationAdmin;
 
 import javax.transaction.TransactionManager;
 import java.net.URL;
@@ -19,6 +20,7 @@ public class TestBundles extends AbstractBlueprintConfigurationTest
     protected void configureEnvironment(EnvironmentBundleSpec environmentBundleSpec)
     {
         environmentBundleSpec.nullService(TransactionManager.class);
+        environmentBundleSpec.nullService(ConfigurationAdmin.class);
     }
 
     @Override
