@@ -66,9 +66,4 @@ public class EnvironmentBundleSpec
         services.add(serviceSpec);
         return this;
     }
-
-    public Iterator<ServiceSpec<?,?>> services()
-    {
-        return Collections.unmodifiableList(services).iterator();
-    }
 }
